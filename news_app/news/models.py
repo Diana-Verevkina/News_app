@@ -43,12 +43,6 @@ class User(AbstractUser):
         choices=ROLES,
         default=USER
     )
-    bio = models.TextField(
-        verbose_name='О себе',
-        null=True,
-        blank=True
-    )
-    avatar = models.ImageField('Аватарка', upload_to='users/', blank=True)
 
     @property
     def is_moderator(self):
@@ -137,3 +131,32 @@ class Follow(models.Model):
 
     def __str__(self):
         return self.author.username
+
+
+class Answer(models.Model):
+    """Ответы к комментариям. Ответ привязан к определённому комментарию."""
+
+    comment = models.ForeignKey(
+        Comment, on_delete=models.CASCADE,
+        max_length=settings.MAX_LEN,
+        blank=True, null=True)
+
+    text = models.TextField(verbose_name='Текст ответа',
+                            help_text='Введите текст ответа')
+
+    class Meta:
+        default_related_name = 'answers'
+        verbose_name = 'Ответ'
+        verbose_name_plural = 'Ответы'
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, verbose_name='Пользователь',
+                             on_delete=models.CASCADE, related_name='profile')
+    description = models.TextField(verbose_name='Описание канала', blank=True,
+                                   null=True)
+    image = models.ImageField('Аватарка', upload_to='user/', blank=True,
+                              null=True)
+
+    def __str__(self):
+        return f'{self.author.username}( {self.description[:15]})'

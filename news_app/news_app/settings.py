@@ -5,6 +5,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 EMAIL = 254
 USERNAME = 150
+MAX_LEN = 200
 
 AUTH_USER_MODEL = 'news.User'
 
