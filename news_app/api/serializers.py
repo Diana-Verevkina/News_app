@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from news.models import Comment, News, Profile
 import datetime as dt
+from news import services as likes_services
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -48,9 +53,30 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class NewsSerializer(serializers.ModelSerializer):
     """Сериализер для модели News."""
-    comments = CommentSerializer(many=True)
+    comments = CommentSerializer(many=True, required=False)
+    is_fan = serializers.SerializerMethodField()
 
     class Meta:
         model = News
-        fields = ('text', 'author', 'pub_date', 'image', 'comments')
+        fields = ('id','text', 'author', 'pub_date', 'image', 'comments', 'is_fan',
+                  'total_likes')
         read_only_fields = ('author',)
+
+    def get_is_fan(self, obj) -> bool:
+        """Проверяет, лайкнул ли `request.user` новость (`obj`)."""
+        user = self.context.get('request').user
+        return likes_services.is_fan(obj, user)
+
+
+class FanSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'full_name',
+        )
+
+    def get_full_name(self, obj):
+        return obj.get_full_name()

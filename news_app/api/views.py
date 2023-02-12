@@ -2,13 +2,16 @@ from django.shortcuts import render, get_object_or_404
 from requests import Response
 from rest_framework import viewsets
 from news.models import Comment, News, User, Profile
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status
 
-from .serializers import CommentSerializer, NewsSerializer, \
-    ProfileSerializer
+from .serializers import CommentSerializer, NewsSerializer, ProfileSerializer
+from .mixins import LikedMixin
 
 
-class NewsViewSet(viewsets.ModelViewSet):
+class NewsViewSet(LikedMixin, viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
 

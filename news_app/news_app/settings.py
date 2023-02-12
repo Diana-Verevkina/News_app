@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'news.apps.NewsConfig',
+    'api.apps.ApiConfig',
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
@@ -58,7 +59,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'news_app.wsgi.application'
-
 
 DATABASES = {
     'default': {

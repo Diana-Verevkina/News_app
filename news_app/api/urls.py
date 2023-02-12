@@ -1,9 +1,8 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .views import NewsViewSet, ProfileViewSet, CommentViewSet
-
 
 app_name = 'api'
 
@@ -13,9 +12,10 @@ router_v1.register('profile', ProfileViewSet, basename='profile')
 router_v1.register(r'news/(?P<news_id>\d+)/comments', CommentViewSet,
                    basename='comments')
 
-
 urlpatterns = [
     path('v1/', include(router_v1.urls)),
+    path('v1/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]

@@ -1,8 +1,20 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 User = get_user_model()
+
+
+class Like(models.Model):
+    user = models.ForeignKey(User, related_name='likes',
+                             on_delete=models.CASCADE)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
 
 
 class News(models.Model):
@@ -14,6 +26,7 @@ class News(models.Model):
                                on_delete=models.CASCADE,
                                related_name='news')
     image = models.TextField('Картинка', blank=True)
+    likes = GenericRelation(Like)
 
     class Meta:
         ordering = ('-pub_date',)
@@ -22,6 +35,10 @@ class News(models.Model):
 
     def __str__(self):
         return self.text[:15]
+
+    @property
+    def total_likes(self):
+        return self.likes.count()
 
 
 class Comment(models.Model):
