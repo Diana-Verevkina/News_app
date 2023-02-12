@@ -13,7 +13,7 @@ class News(models.Model):
     author = models.ForeignKey(User, verbose_name='Автор',
                                on_delete=models.CASCADE,
                                related_name='news')
-    image = models.ImageField('Картинка', upload_to='news/', blank=True)
+    image = models.TextField('Картинка', blank=True)
 
     class Meta:
         ordering = ('-pub_date',)
@@ -32,7 +32,7 @@ class Comment(models.Model):
                                        'комментарий')
     author = models.ForeignKey(User, verbose_name='Автор',
                                on_delete=models.CASCADE, blank=True,
-                               null=True, related_name='comments',
+                               null=True, related_name='comments_author',
                                help_text='Ссылка на автора комментария')
     text = models.TextField(verbose_name='Текст комментария',
                             help_text='Введите текст комментария')
@@ -70,10 +70,14 @@ class Follow(models.Model):
 class Answer(models.Model):
     """Ответы к комментариям. Ответ привязан к определённому комментарию."""
 
+    author = models.ForeignKey(User, verbose_name='Автор',
+                               on_delete=models.CASCADE, blank=True,
+                               null=True, related_name='answers_author',
+                               help_text='Ссылка на автора ответа')
     comment = models.ForeignKey(
         Comment, on_delete=models.CASCADE,
         max_length=settings.MAX_LEN,
-        blank=True, null=True)
+        blank=True, null=True, related_name='answers')
 
     text = models.TextField(verbose_name='Текст ответа',
                             help_text='Введите текст ответа')
@@ -87,10 +91,16 @@ class Answer(models.Model):
 class Profile(models.Model):
     user = models.ForeignKey(User, verbose_name='Пользователь',
                              on_delete=models.CASCADE, related_name='profile')
+    first_name = models.CharField(max_length=50, verbose_name='Имя',
+                                  blank=True, null=True)
+    last_name = models.CharField(max_length=50, verbose_name='Фамилия',
+                                 blank=True, null=True)
+    birth_year = models.PositiveSmallIntegerField(verbose_name='Год рождения',
+                                                  db_index=True, blank=True,
+                                                  null=True)
     description = models.TextField(verbose_name='Описание канала', blank=True,
                                    null=True)
-    image = models.ImageField('Аватарка', upload_to='user/', blank=True,
-                              null=True)
+    image = models.TextField('Картинка', blank=True, null=True)
 
     def __str__(self):
         return f'{self.author.username}( {self.description[:15]})'
