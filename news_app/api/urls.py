@@ -1,8 +1,10 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .views import NewsViewSet, ProfileViewSet, CommentViewSet
+from .views import CommentViewSet, NewsViewSet, ProfileViewSet
 
 app_name = 'api'
 
@@ -19,3 +21,8 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

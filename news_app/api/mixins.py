@@ -1,10 +1,8 @@
-import re
-from .serializers import FanSerializer
-
 from news import services
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
+
+from .serializers import FanSerializer
 
 
 class LikedMixin:
