@@ -4,15 +4,17 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .views import CommentViewSet, NewsViewSet, ProfileViewSet
+from .views import CommentViewSet, FollowViewSet, NewsViewSet, ProfileViewSet
 
 app_name = 'api'
 
 router_v1 = DefaultRouter()
 router_v1.register('news', NewsViewSet, basename='news')
 router_v1.register('profile', ProfileViewSet, basename='profile')
+router_v1.register('follow', FollowViewSet, basename='follow')
 router_v1.register(r'news/(?P<news_id>\d+)/comments', CommentViewSet,
                    basename='comments')
+
 
 urlpatterns = [
     path('v1/', include(router_v1.urls)),

@@ -2,31 +2,11 @@ import datetime as dt
 
 from django.contrib.auth import get_user_model
 from news import services as likes_services
-from news.models import Comment, News, Profile
+from news.models import Comment, Follow, News, Profile
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 User = get_user_model()
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    """Сериализер для модели Profile."""
-    user = serializers.SlugRelatedField(
-        default=serializers.CurrentUserDefault(),
-        slug_field='username',
-        read_only=True
-    )
-
-    class Meta:
-        model = Profile
-        fields = ('id', 'user', 'first_name', 'last_name', 'birth_year',
-                  'description', 'image')
-        read_only_fields = ('user',)
-
-    def validate_birth_year(self, value):
-        year = dt.date.today().year
-        if not (year - 120 < value <= year):
-            raise serializers.ValidationError('Проверьте год рождения!')
-        return value
 
 
 class FilterCommentListSerializer(serializers.ListSerializer):
@@ -56,8 +36,8 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         list_serializer_class = FilterCommentListSerializer
-        fields = ('id', 'news', 'author', 'text', 'created', 'parent',
-                  'children')
+        fields = ('id', 'news', 'author', 'text', 'created',
+                  'parent', 'children')
         read_only_fields = ('author', 'created')
 
 
@@ -96,3 +76,51 @@ class FanSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, obj):
         return obj.get_full_name()
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    """Сериализер для модели Profile."""
+    user = serializers.SlugRelatedField(
+        default=serializers.CurrentUserDefault(),
+        slug_field='username',
+        read_only=True
+    )
+    age = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Profile
+        fields = ('id', 'user', 'first_name', 'last_name', 'birth_year', 'age',
+                  'description', 'image',)
+        read_only_fields = ('user',)
+
+    def validate_birth_year(self, value):
+        year = dt.date.today().year
+        if not (year - 120 < value <= year):
+            raise serializers.ValidationError('Проверьте год рождения!')
+        return value
+
+    def get_age(self, obj):
+        return dt.datetime.now().year - obj.birth_year
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(
+        read_only=True, slug_field='username',
+        default=serializers.CurrentUserDefault()
+    )
+    author = serializers.SlugRelatedField(
+        slug_field='username', queryset=User.objects.all()
+    )
+
+    class Meta:
+        fields = '__all__'
+        model = Follow
+        validators = [UniqueTogetherValidator(
+            queryset=Follow.objects.all(),
+            fields=['user', 'author'])]
+
+    def validate_following(self, data):
+        if self.context['request'].user != data:
+            return data
+        raise serializers.ValidationError('Нельзя подписаться на себя')
+
