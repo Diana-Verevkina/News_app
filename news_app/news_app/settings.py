@@ -26,7 +26,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
-    'django_extensions'
+    'django_extensions',
+    'drf_yasg',
     # 'djoser'
 
 ]
