@@ -1,7 +1,10 @@
 from django.shortcuts import render, get_object_or_404
+from requests import Response
 from rest_framework import viewsets
 from news.models import Comment, News, User, Profile
-from .serializers import AnswerSerializer, CommentSerializer, NewsSerializer, \
+from rest_framework.views import APIView
+
+from .serializers import CommentSerializer, NewsSerializer, \
     ProfileSerializer
 
 
@@ -37,16 +40,3 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user, news=self.get_news())
-
-
-class AnswerViewSet(viewsets.ModelViewSet):
-    serializer_class = AnswerSerializer
-
-    def get_comment(self):
-        return get_object_or_404(Comment, id=self.kwargs.get('comment_id'))
-
-    def get_queryset(self):
-        return self.get_comment().answers.all()
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user, comment=self.get_comment())

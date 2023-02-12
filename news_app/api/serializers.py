@@ -1,15 +1,6 @@
 from rest_framework import serializers
-from news.models import Answer, Comment, News, Profile
+from news.models import Comment, News, Profile
 import datetime as dt
-
-
-class NewsSerializer(serializers.ModelSerializer):
-    """Сериализер для модели News."""
-
-    class Meta:
-        model = News
-        fields = ('text', 'author', 'pub_date', 'image')
-        read_only_fields = ('author',)
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -28,18 +19,38 @@ class ProfileSerializer(serializers.ModelSerializer):
         return value
 
 
+class FilterCommentListSerializer(serializers.ListSerializer):
+    """Фильтр комментариев. Только Parents."""
+
+    def to_representation(self, data):
+        data = data.filter(parent=None)
+        return super().to_representation(data)
+
+
+class RecursiveSerializer(serializers.Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
+
 class CommentSerializer(serializers.ModelSerializer):
     """Сериализер для модели Comment."""
 
+    children = RecursiveSerializer(many=True, read_only=True)
+
     class Meta:
         model = Comment
-        fields = ('news', 'author', 'text', 'created',)
+        list_serializer_class = FilterCommentListSerializer
+        fields = ('id', 'news', 'author', 'text', 'created', 'parent',
+                  'children')
         read_only_fields = ('author',)
 
 
-class AnswerSerializer(serializers.ModelSerializer):
-    """Сериализер для модели Answer."""
+class NewsSerializer(serializers.ModelSerializer):
+    """Сериализер для модели News."""
+    comments = CommentSerializer(many=True)
 
     class Meta:
-        model = Answer
-        fields = ('id', 'author', 'comment', 'text')
+        model = News
+        fields = ('text', 'author', 'pub_date', 'image', 'comments')
+        read_only_fields = ('author',)

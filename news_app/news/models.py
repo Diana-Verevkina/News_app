@@ -38,6 +38,10 @@ class Comment(models.Model):
                             help_text='Введите текст комментария')
     created = models.DateTimeField(verbose_name='Дата публикации комментария',
                                    auto_now_add=True)
+    parent = models.ForeignKey('self', default=None, blank=True, null=True,
+                               on_delete=models.CASCADE,
+                               related_name='children',
+                               verbose_name='parent_comment')
 
     class Meta:
         verbose_name = 'Комментарий'
@@ -65,27 +69,6 @@ class Follow(models.Model):
 
     def __str__(self):
         return self.author.username
-
-
-class Answer(models.Model):
-    """Ответы к комментариям. Ответ привязан к определённому комментарию."""
-
-    author = models.ForeignKey(User, verbose_name='Автор',
-                               on_delete=models.CASCADE, blank=True,
-                               null=True, related_name='answers_author',
-                               help_text='Ссылка на автора ответа')
-    comment = models.ForeignKey(
-        Comment, on_delete=models.CASCADE,
-        max_length=settings.MAX_LEN,
-        blank=True, null=True, related_name='answers')
-
-    text = models.TextField(verbose_name='Текст ответа',
-                            help_text='Введите текст ответа')
-
-    class Meta:
-        default_related_name = 'answers'
-        verbose_name = 'Ответ'
-        verbose_name_plural = 'Ответы'
 
 
 class Profile(models.Model):
