@@ -104,3 +104,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{self.author.username}( {self.description[:15]})'
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=128, unique=True)

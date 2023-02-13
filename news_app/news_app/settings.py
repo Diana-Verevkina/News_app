@@ -3,13 +3,10 @@ import os
 from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 EMAIL = 254
 USERNAME = 150
 MAX_LEN = 200
-
 SECRET_KEY = '-356qv-pha3z3(7f6@xxxsktf6bdff_ydo=x=hb9c2!ky6taie'
-
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -61,11 +58,23 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'news_app.wsgi.application'
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+"""
+
+DATABASES = {
+    'default': {
+        'ENGINE': os.getenv('DB_ENGINE'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT')
     }
 }
 
