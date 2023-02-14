@@ -7,13 +7,13 @@ services:
     volumes:
       - data_value:/var/lib/postgresql/data/
     env_file:
-      - .env
+      - ./.env
 
   # web container
   web:
     build:
-      context: ..
-      dockerfile: ../news_app/Dockerfile
+      context: ../
+      dockerfile: news_app/Dockerfile
     restart: always
     volumes:
       - static_value:/app/news_app/static/
@@ -21,7 +21,7 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
+      - ./.env
 
   # nginx container
   nginx:
