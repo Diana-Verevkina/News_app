@@ -1,6 +1,6 @@
 import os
-
 from datetime import timedelta
+from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EMAIL = 254
@@ -8,6 +8,8 @@ USERNAME = 150
 MAX_LEN = 200
 SECRET_KEY = '-356qv-pha3z3(7f6@xxxsktf6bdff_ydo=x=hb9c2!ky6taie'
 DEBUG = True
+
+# AUTH_USER_MODEL = 'reviews.user'
 
 ALLOWED_HOSTS = []
 
@@ -25,6 +27,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_extensions',
     'drf_yasg',
+    'rest_framework_swagger',
+    'rest_framework.authtoken'
     # 'djoser'
 
 ]
@@ -57,26 +61,27 @@ TEMPLATES = [
     },
 ]
 
+# wsgi-file = /full/path/to/main_app/wsgi.py
 WSGI_APPLICATION = 'news_app.wsgi.application'
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-"""
 
+"""load_dotenv()
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DB_ENGINE'),
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('POSTGRES_USER'),
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', 'postgres'),
+        'USER': os.getenv('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT')
     }
-}
+}"""
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -93,12 +98,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
+LANGUAGE_CODE = 'ru-ru'
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -106,11 +108,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

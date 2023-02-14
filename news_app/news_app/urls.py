@@ -7,4 +7,4 @@ urlpatterns = [
     path('', include("api.urls", namespace="api")),
 ]
 
-urlpatterns += doc_urls
+#urlpatterns += doc_urls

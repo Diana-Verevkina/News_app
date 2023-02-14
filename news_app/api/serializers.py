@@ -50,7 +50,7 @@ class NewsSerializer(serializers.ModelSerializer):
         slug_field='username',
         read_only=True
     )
-    pub_date = serializers.DateTimeField(format="%Y-%m-%d")
+    pub_date = serializers.DateTimeField(format="%Y-%m-%d", required=False)
 
     class Meta:
         model = News
