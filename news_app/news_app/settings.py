@@ -11,7 +11,7 @@ DEBUG = True
 
 # AUTH_USER_MODEL = 'reviews.user'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
