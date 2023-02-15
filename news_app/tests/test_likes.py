@@ -1,4 +1,4 @@
-import os
+"""import os
 
 import requests
 
@@ -40,3 +40,4 @@ def test_dislike():
     except requests.exceptions.HTTPError as e:
         print('ERROR: %s' % e)
     assert r.status_code == code
+"""

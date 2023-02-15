@@ -103,4 +103,4 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='users/', null=True, blank=True)
 
     def __str__(self):
-        return f'{self.author.username}( {self.description[:15]})'
+        return f'{self.user.username}( {self.description[:15]})'
