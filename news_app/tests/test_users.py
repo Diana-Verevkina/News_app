@@ -1,11 +1,7 @@
 import os
 import random
 
-import pytest
-from django.contrib.auth import get_user_model
 import requests
-
-User = get_user_model()
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'news_app.settings')
 
@@ -49,7 +45,7 @@ def test_jwt_create():
 def test_login():
     url = "http://127.0.0.1:8000/login/"
     r = requests.post(url, data=user,
-                     headers={'Authorization': 'Bearer ' + token})
+                      headers={'Authorization': 'Bearer ' + token})
     code = 200
     try:
         r.raise_for_status()
