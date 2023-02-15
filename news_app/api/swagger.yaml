@@ -52,26 +52,6 @@ paths:
       tags:
         - JWT-токен
     parameters: []
-  /auth/jwt/verify/:
-    post:
-      operationId: auth_jwt_verify_create
-      description: |-
-        Takes a token and indicates if it is valid.  This view provides no
-        information about a token's fitness for a particular use.
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/TokenVerify'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/TokenVerify'
-      tags:
-        - JWT-токен
-    parameters: []
   /auth/users/:
     get:
       operationId: auth_users_list
