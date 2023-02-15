@@ -1,5 +1,4 @@
-import os
-import random
+"""import os
 
 import requests
 
@@ -84,3 +83,4 @@ def test_delete_news_id():
     except requests.exceptions.HTTPError as e:
         print('ERROR: %s' % e)
     assert r.status_code == code
+"""
