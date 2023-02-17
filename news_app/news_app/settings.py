@@ -9,8 +9,6 @@ MAX_LEN = 200
 SECRET_KEY = '-356qv-pha3z3(7f6@xxxsktf6bdff_ydo=x=hb9c2!ky6taie'
 DEBUG = True
 
-# AUTH_USER_MODEL = 'reviews.user'
-
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -122,9 +120,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS':
-        'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5,
+    #'DEFAULT_PAGINATION_CLASS':
+    #    'rest_framework.pagination.PageNumberPagination',
+    #'PAGE_SIZE': 5,
 }
 
 SIMPLE_JWT = {

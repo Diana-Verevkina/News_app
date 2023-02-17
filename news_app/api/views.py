@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404
 from news.models import News, Profile
 from rest_framework import viewsets, mixins
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, \
+    LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, \
     IsAuthenticated
 
@@ -14,7 +15,8 @@ from .serializers import CommentSerializer, FollowSerializer, \
 class NewsViewSet(LikedMixin, viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    pagination_class = PageNumberPagination
+    #pagination_class = PageNumberPagination
+    pagination_class = LimitOffsetPagination
     ordering_fields = ['pub_date']
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 

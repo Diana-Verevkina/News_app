@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/news_app/news" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv/vir" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">

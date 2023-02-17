@@ -29,7 +29,7 @@ class News(models.Model):
     likes = GenericRelation(Like)
 
     class Meta:
-        ordering = ('-pub_date',)
+        ordering = ('pub_date',)
         verbose_name = 'Новость'
         verbose_name_plural = 'Новости'
 
