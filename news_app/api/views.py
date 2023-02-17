@@ -1,15 +1,15 @@
 from django.shortcuts import get_object_or_404
 from news.models import News, Profile
 from rest_framework import viewsets, mixins
-from rest_framework.pagination import PageNumberPagination, \
-    LimitOffsetPagination
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, \
-    IsAuthenticated
+from rest_framework.pagination import (PageNumberPagination,
+                                       LimitOffsetPagination)
+from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
+                                        IsAuthenticated)
 
 from .permissions import IsAuthorOrReadOnly
 from .mixins import LikedMixin
-from .serializers import CommentSerializer, FollowSerializer, \
-    NewsSerializer, ProfileSerializer
+from .serializers import (CommentSerializer, FollowSerializer,
+                          NewsSerializer, ProfileSerializer)
 
 
 class NewsViewSet(LikedMixin, viewsets.ModelViewSet):

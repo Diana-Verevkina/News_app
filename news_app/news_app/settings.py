@@ -26,9 +26,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'drf_yasg',
     'rest_framework_swagger',
-    'rest_framework.authtoken'
-    # 'djoser'
-
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +57,6 @@ TEMPLATES = [
     },
 ]
 
-# wsgi-file = /full/path/to/main_app/wsgi.py
 WSGI_APPLICATION = 'news_app.wsgi.application'
 
 DATABASES = {
