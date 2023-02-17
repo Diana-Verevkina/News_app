@@ -2,63 +2,7 @@ import pytest
 from news.models import News
 
 
-@pytest.fixture
-def user(django_user_model):
-    return django_user_model.objects.create_user(username='TestUser',
-                                                 password='vfghnj1234567')
-
-
-@pytest.fixture
-def user_2(django_user_model):
-    return django_user_model.objects.create_user(username='TestUser2',
-                                                 password='1hurdyrtgj234567')
-
-
-@pytest.fixture
-def another_user(django_user_model):
-    return django_user_model.objects.create_user(username='TestUserAnother',
-                                                 password='iuytfbnjkmnbg646')
-
-
-@pytest.fixture
-def token(user):
-    from rest_framework_simplejwt.tokens import RefreshToken
-    refresh = RefreshToken.for_user(user)
-
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-    }
-
-
-@pytest.fixture
-def user_client(token):
-    from rest_framework.test import APIClient
-
-    client = APIClient()
-    client.credentials(HTTP_AUTHORIZATION=f'Bearer {token["access"]}')
-    return client
-
-
-@pytest.fixture
-def news(user):
-    from news.models import News
-    return News.objects.create(text='Тестовый пост 1', author=user,)
-
-
-@pytest.fixture
-def news_2(user):
-    from news.models import News
-    return News.objects.create(text='Тестовый пост 2', author=user,)
-
-
-@pytest.fixture
-def another_news(another_user):
-    from news.models import News
-    return News.objects.create(text='Тестовый пост 3', author=another_user,)
-
-
-class TestPostAPI:
+class TestNewsAPI:
 
     @pytest.mark.django_db(transaction=True)
     def test_news_page_not_found(self, client, news):
@@ -126,7 +70,7 @@ class TestPostAPI:
             'сериализатора модели News'
         )
         assert test_news['author'] == news.author.username, (
-            'Проверьте, что `author` сериализатора модели Post возвращает '
+            'Проверьте, что `author` сериализатора модели News возвращает '
             'имя пользователя'
         )
 
@@ -201,7 +145,7 @@ class TestPostAPI:
         data = {}
         response = user_client.post('/v1/news/', data=data)
         assert response.status_code == 400, (
-            'Проверьте, что при POST запросе на `/v1/posts/` с неправильными '
+            'Проверьте, что при POST запросе на `/v1/news/` с неправильными '
             'данными возвращается статус 400'
         )
 
